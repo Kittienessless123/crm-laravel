@@ -77,16 +77,15 @@ docker exec -it app_laravel php artisan migrate
 
 # 5. Сгенерировать ключ приложения
 docker exec -it app_laravel php artisan key:generate
-```
-
 # 6. Открыть в браузере
 # https://localhost
-# (принять предупреждение о сертификате)
+#(принять предупреждение о сертификате)
+```
 Остановка
 ```bash
 docker-compose down
-Полная пересборка
 ```
+Полная пересборка
 ```bash
 docker-compose down -v
 docker-compose build --no-cache
@@ -105,6 +104,7 @@ docker-compose up -d
                              Grafana (дашборды)
 
 Vue Frontend ← Inertia.js ← Laravel SSR
+```
 📁 Структура проекта
 ```text
 laravel-crm/
