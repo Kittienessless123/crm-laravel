@@ -77,20 +77,23 @@ docker exec -it app_laravel php artisan migrate
 
 # 5. Сгенерировать ключ приложения
 docker exec -it app_laravel php artisan key:generate
+```
 
 # 6. Открыть в браузере
 # https://localhost
 # (принять предупреждение о сертификате)
 Остановка
-bash
+```bash
 docker-compose down
 Полная пересборка
-bash
+```
+```bash
 docker-compose down -v
 docker-compose build --no-cache
 docker-compose up -d
+```
 🏗️ Архитектура
-text
+```text
 Пользователь → Nginx (HTTPS) → Laravel (PHP-FPM) → PostgreSQL
                                   ↓
                              Redis (кеш/сессии)
@@ -103,7 +106,7 @@ text
 
 Vue Frontend ← Inertia.js ← Laravel SSR
 📁 Структура проекта
-text
+```text
 laravel-crm/
 ├── docker/
 │   ├── app/           # Dockerfile для Laravel + Node
@@ -124,6 +127,7 @@ laravel-crm/
 │   └── routes/
 ├── docker-compose.yml
 └── README.md
+```
 🔧 Технологический стек
 Категория	Технологии
 Backend	PHP 8.4, Laravel 13, Inertia.js
@@ -145,7 +149,6 @@ GitHub: Kittienessless123
 📝 Лицензия
 Проект создан в учебных целях. Свободное использование.
 
-text
 
----
+
 
