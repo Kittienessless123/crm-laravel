@@ -1,0 +1,12 @@
+node_modules
+vendor
+.git
+.env
+docker/nginx/ssl/*
+
+server/node_modules
+server/vendor
+server/.git
+server/storage/logs/*
+docker/nginx/ssl/*
+*.md
