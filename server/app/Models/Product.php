@@ -19,28 +19,28 @@ class Product extends Model
         'product_name',        // Название товара
         'sku',                 // Артикул/SKU
         'description',         // Описание
-        'category',            // Категория (стройматериалы, пиломатериалы и т.д.)
-        'unit',                // Единица измерения (шт, м3, пог.м, кг)
+        'category_id',          // Связь с категорией
+        'unit_id',
         'size',                // Размеры (200*100, 50мм, 20*20)
-        
+
         // Цены
         'base_price',          // Базовая цена (себестоимость)
         'retail_price',        // Розничная цена
         'wholesale_price',     // Оптовая цена
         'currency',            // Валюта (RUB, USD, EUR)
         'margin',              // Наценка (%)
-        
+
         // Медиа
         'photo_url',           // Ссылка на фото
-        
+
         // Связи
         'seller_id',           // Продавец (из CRM)
         'supplier_id',         // Поставщик (из поиска по прайсам)
-        
+
         // Статусы
         'is_active',           // Активен ли товар
         'is_available',        // В наличии
-        
+
         // Дополнительно
         'availability_date',   // Дата готовности (май-июнь, Сентябрь)
         'metadata',            // JSON с дополнительными характеристиками
@@ -80,4 +80,15 @@ class Product extends Model
     {
         return $this->hasMany(PriceList::class);
     }
+    
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
 }
