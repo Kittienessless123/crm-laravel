@@ -5,13 +5,13 @@ namespace App\Http\Repositories;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
-use App\Models\User;
+use App\Models\Payment;
 
-class UserRepository extends BaseRepository
+class PaymentRepository extends BaseRepository
 {
   protected array $defaultRelations = ['transaction'];
 
-  public function __construct(User $model)
+  public function __construct(Payment $model)
   {
     parent::__construct($model, self::$defaultRelations);
   }

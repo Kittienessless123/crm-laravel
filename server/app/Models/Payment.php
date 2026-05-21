@@ -14,6 +14,7 @@ class Payment extends Model
     protected $keyType = 'string';
 
     protected $fillable = [
+        'id',
         'transaction_id',
         'amount',
         'payment_method',        // card, bank_transfer, cash
