@@ -53,13 +53,12 @@ class PriceListRepository extends BaseRepository
       ->paginate($perPage);
   }
 
-  //todo 
-  //where options
-  public function getPriceListFilteredPaginated(string $whereOp, int $perPage = 15): LengthAwarePaginator
+  
+  public function getPriceListFilteredPaginated(array $filters, int $perPage = 15): LengthAwarePaginator
   {
     return $this->model
       ->with($this->getDefaultRelations())
-      ->where('product_id', $whereOp)
+      ->filter('product_id', $filters)
       ->latest()
       ->paginate($perPage);
   }

@@ -64,7 +64,7 @@ abstract class BaseRepository implements IBaseRepository
 
     if ($dataToUpdate) {
       $dataToUpdate->update($data);
-      return $dataToUpdate->fresh(['category', 'unit', 'seller', 'supplier']);
+      return $dataToUpdate->fresh($this->getDefaultRelations());
     }
 
     return null;
