@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 
 trait SellerValidationRules
 {
-  protected function sellerRules(): array
+  protected function sellerRules(?int $sellerId = null): array
   {
     return [
       'name' => $this->nameRules(),

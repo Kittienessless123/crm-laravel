@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 
 trait SupplierValidationRules
 {
-  protected function supplierRules(): array
+  protected function supplierRules(?int $supplierId = null): array
   {
     return [
       'name' => $this->nameRules(),
