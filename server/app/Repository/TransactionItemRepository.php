@@ -32,15 +32,32 @@ class TransactionItemRepository extends BaseRepository
       ->first();
   }
 
-  //todo 
-  //where options
-
-  public function getItemsFiltered(string $whereOp, int $perPage = 15): LengthAwarePaginator
+  public function getSortedPaginated(string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
   {
     return $this->model
-      ->with($this->getDefaultRelations())
-      ->where('sku', $whereOp)
-      ->latest()
+      ->with($this->defaultRelations)
+      ->applySorting($sortBy, $direction)
+      ->paginate($perPage);
+  }
+
+  public function getFilteredAndSortedPaginated(array $filters, string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
+  {
+    return $this->model
+      ->with($this->defaultRelations)
+      ->filter($filters)
+      ->applySorting($sortBy, $direction)
+      ->paginate($perPage);
+  }
+
+  public function searchPaginated(string $term, string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
+  {
+    return $this->model
+      ->with($this->defaultRelations)
+      ->where(function ($query) use ($term) {
+        $query->where('name', 'like', "%{$term}%")
+          ->orWhere('contact_info', 'like', "%{$term}%");
+      })
+      ->applySorting($sortBy, $direction)
       ->paginate($perPage);
   }
 }

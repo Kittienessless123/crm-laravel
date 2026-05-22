@@ -15,4 +15,16 @@ class SupplierRepository extends BaseRepository
   {
     parent::__construct($model, self::$defaultRelations);
   }
+
+  public function searchPaginated(string $term, string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
+  {
+    return $this->model
+      ->with($this->defaultRelations)
+      ->where(function ($query) use ($term) {
+        $query->where('name', 'like', "%{$term}%")
+          ->orWhere('contact_info', 'like', "%{$term}%");
+      })
+      ->applySorting($sortBy, $direction)
+      ->paginate($perPage);
+  }
 }

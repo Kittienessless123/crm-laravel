@@ -37,7 +37,7 @@ class UserRepository extends BaseRepository
     return $userToUpdate;
   }
 
-  public function  setActiveUser(string $userId): ?User
+  public function setActiveUser(string $userId): ?User
   {
     $userToUpdate = $this->model->find($userId);
     if ($userToUpdate) {
