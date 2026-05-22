@@ -16,15 +16,11 @@ class Supplier extends Model
 
     protected $fillable = [
         'product_id',          // Внешний ID из прайса поставщика
-        'product_name',        // Название товара
-      
+        'name'
     ];
 
     protected function casts(): array
     {
-        return [
-      
-        ];
+        return [];
     }
-
 }

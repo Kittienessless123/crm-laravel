@@ -12,16 +12,17 @@ trait ProductValidationRules
   {
     return [
       'name' => $this->nameRules(),
-      'sku' => $this->skuRules($productId),
+      'sku' => $this->skuRules(),
+      'description' => $this->descriptionRules(),
+      'category' => $this->categoryRules(),
+
     ];
   }
-
 
   protected function nameRules(): array
   {
     return ['required', 'string', 'max:255'];
   }
-
 
   protected function skuRules(): array
   {
