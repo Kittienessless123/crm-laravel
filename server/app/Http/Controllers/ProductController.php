@@ -164,7 +164,7 @@ class ProductController extends Controller
     /**
      * Show product view (for Blade template, если нужно)
      */
-    public function showView(string $id): View
+    public function show(string $id): View
     {
         $product = $this->productService->getByProductId($id);
 

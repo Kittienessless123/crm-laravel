@@ -11,18 +11,25 @@ use Inertia\Response;
 use App\Http\Services\PriceListService;
 use App\Models\PriceList;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 
 class PriceListController extends Controller
 {
-  public function __construct(
+    public function __construct(
         private PriceListService $service
     ) {}
 
 
     public function index(): JsonResponse
     {
-        $products = $this->service->getAll();
-        return response()->json($products);
+        $pl = $this->service->getAllWithRelationsPaginated();
+        return response()->json($pl);
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $pl = $this->service->create($request->all());
+        return response()->json($pl, 201);
     }
 }
