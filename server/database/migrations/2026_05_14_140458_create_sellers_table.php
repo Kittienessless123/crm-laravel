@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->json('metadata')->nullable();
             $table->timestamps();
+            $table->datetime('creation_date')->nullable();
+            $table->datetime('updated_date')->nullable();
         });
     }
 

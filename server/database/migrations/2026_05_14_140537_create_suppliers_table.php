@@ -17,6 +17,8 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->json('metadata')->nullable();
             $table->timestamps();
+            $table->string('product_id')->nullable()->comment('Внешний ID из прайса поставщика');
+
         });
     }
 
