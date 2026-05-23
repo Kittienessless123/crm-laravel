@@ -7,6 +7,9 @@ use App\Http\Services\ProductService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Requests\Product\ProductCreationRequest;
+use App\Http\Requests\Product\ProductDeleteRequest;
+use App\Http\Requests\Product\ProductUpdateRequest;
 
 class ProductController extends Controller
 {
@@ -46,40 +49,39 @@ class ProductController extends Controller
     /**
      * Get single product by ID
      */
-    public function show(string $id): JsonResponse
+    public function showAll(): JsonResponse
     {
-        $product = $this->productService->getOneByProductId($id);
-        
+        $product = $this->productService->getAll();
+
         if (!$product) {
             return response()->json([
                 'success' => false,
                 'message' => 'Product not found'
             ], 404);
         }
-        
+
         return response()->json($product);
     }
 
     /**
      * Create single product
      */
-    public function store(Request $request): JsonResponse
+    public function store(ProductCreationRequest $request): JsonResponse
     {
-        $data = $request->all();
-        $product = $this->productService->create($data);
+        $product = $this->productService->create($request->validated());
         return response()->json($product, 201);
     }
 
     /**
      * Create multiple products (bulk)
      */
-    public function storeBulk(Request $request): JsonResponse
+    public function storeBulk(ProductCreationRequest $request): JsonResponse
     {
-        $data = $request->all();
-        
+        $data = $request->validated();
+
         // Ожидаем массив products: ['products' => [...]] или просто массив
         $productsData = $data['products'] ?? $data;
-        
+
         $products = $this->productService->createBulk($productsData);
         return response()->json($products, 201);
     }
@@ -88,18 +90,18 @@ class ProductController extends Controller
      * Update product
      * Получаем ID из route параметра {id}
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(ProductUpdateRequest $request, string $id): JsonResponse
     {
-        $data = $request->all();
+        $data = $request->validated();
         $product = $this->productService->update($id, $data);
-        
+
         if (!$product) {
             return response()->json([
                 'success' => false,
                 'message' => 'Product not found'
             ], 404);
         }
-        
+
         return response()->json($product);
     }
 
@@ -107,17 +109,19 @@ class ProductController extends Controller
      * Delete single product
      * Получаем ID из route параметра {id}
      */
-    public function destroy(string $id): JsonResponse
+    public function destroy(ProductDeleteRequest $request): JsonResponse
     {
-        $deleted = $this->productService->delete($id);
-        
+        $data = $request->validated();
+
+        $deleted = $this->productService->delete($data);
+
         if (!$deleted) {
             return response()->json([
                 'success' => false,
                 'message' => 'Product not found'
             ], 404);
         }
-        
+
         return response()->json(null, 204);
     }
 
@@ -125,21 +129,21 @@ class ProductController extends Controller
      * Delete multiple products
      * Получаем массив IDs из тела запроса
      */
-    public function destroyMany(Request $request): JsonResponse
+    public function destroyMany(ProductDeleteRequest $request): JsonResponse
     {
-        // Вариант 1: ids как массив в теле запроса
-        $ids = $request->input('ids');
-        
+        $data = $request->validated();
+        $ids = $data->input('ids');
+
         // Вариант 2: ids как JSON массив
         if (!$ids && $request->isJson()) {
             $ids = $request->json()->all();
         }
-        
+
         // Вариант 3: ids как строка через запятую
         if (!$ids && $request->has('ids_string')) {
             $ids = explode(',', $request->input('ids_string'));
         }
-        
+
         // Проверяем, что ids - массив
         if (!$ids || !is_array($ids) || empty($ids)) {
             return response()->json([
@@ -147,9 +151,9 @@ class ProductController extends Controller
                 'message' => 'Invalid or empty ids array'
             ], 400);
         }
-        
+
         $deleted = $this->productService->deleteBulk($ids);
-        
+
         return response()->json([
             'success' => true,
             'message' => "Deleted {$deleted} products",
@@ -163,7 +167,7 @@ class ProductController extends Controller
     public function showView(string $id): View
     {
         $product = $this->productService->getOneByProductId($id);
-        
+
         return view('product.view', [
             'product' => $product
         ]);

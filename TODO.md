@@ -13,3 +13,23 @@
 - [ ] Роуты
 - [ ] Написать тесты
 - [ ] Потестировать бекенд
+
+
+
+-- rules 
+  -- product 
+  -- seller
+  -- supplier
+-- requests 
+  -- product 
+    -- creation 
+    -- delete
+    -- update
+  -- seller
+    -- creation 
+    -- delete
+    -- update
+  -- supplier
+    -- creation 
+    -- delete
+    -- update

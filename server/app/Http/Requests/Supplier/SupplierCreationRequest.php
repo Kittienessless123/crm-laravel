@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Settings;
+namespace App\Http\Requests\Supplier;
 
 use App\Concerns\SupplierValidationRules;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -10,8 +10,13 @@ class SupplierCreationRequest extends FormRequest
 {
   use SupplierValidationRules;
 
+  public function authorize(): bool
+  {
+    return true;
+  }
+
   public function rules(): array
   {
-    return $this->supplierRules($this->supplier()->id);
+    return $this->supplierRules(isUpdate: false);
   }
 }

@@ -1,18 +1,31 @@
 <?php
 
-namespace App\Http\Requests\Settings;
+namespace App\Http\Requests\Supplier;
 
-use App\Concerns\SupplierValidationRules;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class SupplierDeleteRequest extends FormRequest
+class SupplierDeleteManyRequest extends FormRequest
 {
-  use SupplierValidationRules;
+    public function authorize(): bool
+    {
+        return true;
+    }
 
-  public function rules(): array
-  {
-    return $this->supplierRules($this->supplier()->id);
-  }
-  
+    public function rules(): array
+    {
+        return [
+            'ids' => ['required', 'array', 'min:1', 'max:100'],
+            'ids.*' => ['required', 'string', 'exists:suppliers,id'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'ids.required' => 'Необходимо передать массив ID поставщиков',
+            'ids.min' => 'Нужно указать хотя бы одного поставщика',
+            'ids.max' => 'Нельзя удалить больше 100 поставщиков за раз',
+            'ids.*.exists' => 'Поставщик с указанным ID не найден',
+        ];
+    }
 }

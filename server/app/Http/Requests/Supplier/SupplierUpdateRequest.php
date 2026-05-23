@@ -1,18 +1,24 @@
 <?php
 
-namespace App\Http\Requests\Settings;
+namespace App\Http\Requests\Supplier;
 
 use App\Concerns\SupplierValidationRules;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class SupplierUpdateRequest extends FormRequest
 {
-  use SupplierValidationRules;
+    use SupplierValidationRules;
 
-  public function rules(): array
-  {
-    return $this->supplierRules($this->supplier()->id);
-  }
-  
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return $this->supplierRules(
+            supplierId: $this->route('supplier'),
+            isUpdate: true
+        );
+    }
 }

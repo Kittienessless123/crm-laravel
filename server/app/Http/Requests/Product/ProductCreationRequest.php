@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Settings;
+namespace App\Http\Requests\Product;
 
 use App\Concerns\ProductValidationRules;
 use Illuminate\Contracts\Validation\ValidationRule;

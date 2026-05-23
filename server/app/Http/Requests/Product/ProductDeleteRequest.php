@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Settings;
+namespace App\Http\Requests\Product;
 
 use App\Concerns\ProductValidationRules;
 use Illuminate\Contracts\Validation\ValidationRule;
@@ -10,9 +10,11 @@ class ProductDeleteRequest extends FormRequest
 {
   use ProductValidationRules;
 
+
   public function rules(): array
   {
-    return $this->productRules($this->product()->id);
+    return [
+      // Для одиночного удаления ID приходит в URL (не проверяется здесь)
+    ];
   }
-  
 }
