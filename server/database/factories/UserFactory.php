@@ -5,9 +5,13 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class UserFactory extends Factory
 {
+    use HasFactory, Notifiable; // <-- Добавь HasFactory
+
     public function definition(): array
     {
         return [

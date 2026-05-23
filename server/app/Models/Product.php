@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
-    use HasUuids;
+    use HasUuids, HasFactory;
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -43,7 +44,6 @@ class Product extends Model
         'is_available',        // В наличии
 
         // Дополнительно
-        'availability_date',   // Дата готовности (май-июнь, Сентябрь)
         'metadata',            // JSON с дополнительными характеристиками
     ];
 
@@ -56,7 +56,6 @@ class Product extends Model
             'margin' => 'float',
             'is_active' => 'boolean',
             'is_available' => 'boolean',
-            'availability_date' => 'date',
             'metadata' => 'json',
         ];
     }

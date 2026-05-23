@@ -14,7 +14,10 @@ class SupplierFactory extends Factory
         return [
             'product_id' => 'SUP-' . $this->faker->unique()->numerify('#####'),
             'name' => $this->faker->company(),
-            'region' => $this->faker->region(),
+            'region' => $this->faker->randomElement([
+                'Москва', 'СПб', 'Краснодарский край', 'Сибирь', 
+                'Урал', 'Поволжье', 'Дальний Восток', 'Центральный'
+            ]),
             'city' => $this->faker->city(),
             'contact_info' => $this->faker->phoneNumber(),
             'is_active' => $this->faker->boolean(90),

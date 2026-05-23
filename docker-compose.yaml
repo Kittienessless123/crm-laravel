@@ -43,8 +43,8 @@ services:
     container_name: app_laravel
     restart: unless-stopped
     environment:
-      APP_ENV: production
-      APP_DEBUG: "false"
+      APP_ENV: local
+      APP_DEBUG: "true"
       DB_CONNECTION: pgsql
       DB_HOST: postgres
       DB_PORT: 5432

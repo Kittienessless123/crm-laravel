@@ -37,14 +37,13 @@ return new class extends Migration
             $table->string('photo_url')->nullable();
 
             // Дополнительно
-            $table->string('availability_date')->nullable()->comment('май-июнь, Сентябрь');
             $table->json('metadata')->nullable();
             $table->timestamps();
 
             // Индексы
             $table->index('product_name');
             $table->index('sku');
-            $table->index('category');
+            $table->index('category_id');
         });
     }
 
