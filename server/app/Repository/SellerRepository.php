@@ -24,7 +24,14 @@ class SellerRepository extends BaseRepository
       ->latest()
       ->paginate($perPage);
   }
-
+  public function getFilteredPaginated(array $filters, int $perPage = 15): LengthAwarePaginator
+  {
+    return $this->model
+      ->with($this->getDefaultRelations())
+      ->filter('product_id', $filters)
+      ->latest()
+      ->paginate($perPage);
+  }
   public function getSortedPaginated(string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
   {
     return $this->model

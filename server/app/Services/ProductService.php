@@ -4,60 +4,62 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\ProductRepository;
 use App\Models\Product;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\LengthAwarePaginator;
 
-class ProductService
+
+class ProductService extends BaseService
 {
-  public function __construct(
-    private ProductRepository $productRepo
-  ) {}
+  protected ProductRepository $repo; // Теперь работает!
 
-
-  public Product $product;
-
-  public function getOneByProductId(int $pruduct_id): Product
+  public function __construct(ProductRepository $repo)
   {
-    return $this->productRepo->findByProductId($pruduct_id);
+    parent::__construct($repo);
   }
 
-  public function create(array $data): Product
+  // Специфичные методы для Product
+
+  public function getBySku(string $sku): ?Product
   {
-    return $this->productRepo->create($data);
+    return $this->repo->getBySku($sku);
   }
 
-  public function update(string $pruduct_id, array $data): Product
+  public function getByProductId(string $productId): ?Product
   {
-    return $this->productRepo->update($pruduct_id, $data);
+    return $this->repo->getByProductId($productId);
   }
 
-  public function delete(string $id): bool
+  public function getBuyable(array $filters = [], string $sortBy = 'created_at', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
   {
-    return  $this->productRepo->delete($id);
+    return $this->repo->getActiveProducts(
+      sortBy: $sortBy,
+      direction: $direction,
+      perPage: $perPage
+    );
   }
 
-  public function getAll(): Collection
+  public function getByCategory(string $categoryId, string $sortBy = 'created_at', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
   {
-    return $this->productRepo->getAll();
+    return $this->repo->getByCategoryPaginated(
+      categoryId: $categoryId,
+      sortBy: $sortBy,
+      direction: $direction,
+      perPage: $perPage
+    );
+  }
+  
+  public function createBulk(array $productsData): Collection
+  {
+    return $this->repo->createMany($productsData);
   }
 
-  public function createBulk(array $data): Collection
+  public function search(string $term, string $sortBy = 'created_at', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
   {
-    return $this->productRepo->createMany($data);
-  }
-
-  public function deleteBulk(array $ids): int
-  {
-    return $this->productRepo->deleteMany($ids);
-  }
-
-  public function getProductsByCategory(string $cat_id, int $perPage = 15): LengthAwarePaginator
-  {
-    return $this->productRepo->getByCategory($cat_id, $perPage);
-  }
-
-  public function getActiveProducts(int $perPage = 15): LengthAwarePaginator
-  {
-    return $this->productRepo->getActiveProducts($perPage);
+    return $this->repo->searchPaginated(
+      term: $term,
+      sortBy: $sortBy,
+      direction: $direction,
+      perPage: $perPage
+    );
   }
 }

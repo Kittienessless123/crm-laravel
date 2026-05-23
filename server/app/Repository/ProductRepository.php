@@ -16,7 +16,7 @@ class ProductRepository extends BaseRepository
     parent::__construct($model, self::$defaultRelations);
   }
 
-  public function findBySku(string $sku): ?Product
+  public function getBySku(string $sku): ?Product
   {
     return $this->model
       ->with(['category', 'unit', 'seller', 'supplier'])
@@ -24,7 +24,7 @@ class ProductRepository extends BaseRepository
       ->first();
   }
 
-  public function findByProductId(string $productId): ?Product
+  public function getByProductId(string $productId): ?Product
   {
     return $this->model
       ->with(['category', 'unit', 'seller', 'supplier'])
@@ -56,26 +56,35 @@ class ProductRepository extends BaseRepository
     );
   }
 
-  public function getByCategory(string $categoryId, int $perPage = 15): LengthAwarePaginator
+  public function getByCategoryPaginated(string $categoryId, string $sortBy = 'created_at', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
   {
     return $this->model
       ->with($this->getDefaultRelations())
       ->where('category_id', $categoryId)
-      ->latest()
+      ->applySorting($sortBy, $direction)
       ->paginate($perPage);
   }
 
-  public function getActiveProducts(int $perPage = 15): LengthAwarePaginator
+  public function getActiveProducts(string $sortBy = 'created_at', string $direction = 'desc',  int $perPage = 15): LengthAwarePaginator
   {
     return $this->model
       ->with($this->getDefaultRelations())
       ->where('is_active', true)
       ->where('is_available', true)
       ->latest()
+      ->applySorting($sortBy, $direction)
       ->paginate($perPage);
   }
 
-  public function getProductsFilteredPaginated(array $filters, int $perPage = 15): LengthAwarePaginator
+  public function getSortedPaginated(string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
+  {
+    return $this->model
+      ->with($this->defaultRelations)
+      ->applySorting($sortBy, $direction)
+      ->paginate($perPage);
+  }
+
+  public function getFilteredPaginated(array $filters, int $perPage = 15): LengthAwarePaginator
   {
     return $this->model
       ->with($this->getDefaultRelations())

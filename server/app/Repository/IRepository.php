@@ -5,6 +5,7 @@ namespace App\Http\Repositories;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 
 interface IBaseRepository
 {
@@ -15,6 +16,8 @@ interface IBaseRepository
   public function update(string $id, array $data): ?Model;
   public function delete(string $id): bool;
   public function deleteMany(array $ids): int;
+  public function getFilteredPaginated(array $filters, int $perPage = 15): LengthAwarePaginator;
+  public function getSortedPaginated(string $sortBy = 'created_at', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator;
 }
 
 abstract class BaseRepository implements IBaseRepository
@@ -84,5 +87,15 @@ abstract class BaseRepository implements IBaseRepository
   public function deleteMany(array $ids): int
   {
     return $this->model->whereIn('id', $ids)->delete();
+  }
+
+  public function getSortedPaginated(string $sortBy = 'created_at', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator
+  {
+    throw new \Exception('Not implemented');
+  }
+
+  public function getFilteredPaginated(array $filters, int $perPage = 15): LengthAwarePaginator
+  {
+    throw new \Exception('Not implemented');
   }
 }

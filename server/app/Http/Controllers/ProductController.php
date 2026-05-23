@@ -32,7 +32,7 @@ class ProductController extends Controller
     public function getByCategory(Request $request, string $cat_id): JsonResponse
     {
         $perPage = $request->get('per_page', 15);
-        $products = $this->productService->getProductsByCategory($cat_id, $perPage);
+        $products = $this->productService->getByCategory($cat_id, $perPage);
         return response()->json($products);
     }
 
@@ -42,7 +42,7 @@ class ProductController extends Controller
     public function getActive(Request $request): JsonResponse
     {
         $perPage = $request->get('per_page', 15);
-        $products = $this->productService->getActiveProducts($perPage);
+        $products = $this->productService->getBuyable($perPage);
         return response()->json($products);
     }
 
@@ -152,7 +152,7 @@ class ProductController extends Controller
             ], 400);
         }
 
-        $deleted = $this->productService->deleteBulk($ids);
+        $deleted = $this->productService->deleteMany($ids);
 
         return response()->json([
             'success' => true,
@@ -166,7 +166,7 @@ class ProductController extends Controller
      */
     public function showView(string $id): View
     {
-        $product = $this->productService->getOneByProductId($id);
+        $product = $this->productService->getByProductId($id);
 
         return view('product.view', [
             'product' => $product
