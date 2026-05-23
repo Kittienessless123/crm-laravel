@@ -12,11 +12,18 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name')->unique();
             $table->string('slug')->unique();
-            $table->foreignUuid('parent_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            
+        });
+
+        // Внешний ключ добавляем ПОСЛЕ создания таблицы
+        Schema::table('categories', function (Blueprint $table) {
+            $table->foreignUuid('parent_id')
+                ->nullable()
+                ->constrained('categories')
+                ->nullOnDelete();
+                
             $table->index('parent_id');
         });
     }
