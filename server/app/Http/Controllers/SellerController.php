@@ -65,7 +65,7 @@ class SellerController extends Controller
     return response()->json(null, 204);
   }
 
-  public function showView(string $id): View
+  public function show(string $id): View
   {
     $seller = $this->sellerService->getOneById($id);
 

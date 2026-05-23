@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\PriceListController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SellerController;
+use App\Http\Controllers\SupplierController;
 
 Route::inertia('/', 'Welcome', [
     'canRegister' => Features::enabled(Features::registration()),
@@ -39,6 +42,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // DELETE /products/{id} - удалить один
         Route::delete('/{id}', [ProductController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('/sellers')->name('sellers.')->group(function () {
+        Route::get('/', [SellerController::class, 'index'])->name('index');
+        Route::post('/', [SellerController::class, 'store'])->name('store');
+        Route::get('/{id}', [SellerController::class, 'show'])->name('show');
+        Route::delete('/{id}', [SellerController::class, 'destroy'])->name('destroy');
+        Route::put('/{id}', [SellerController::class,    'update'])->name('update');
+    });
+
+    Route::prefix('/suppliers')->name('suppliers.')->group(function () {
+        Route::get('/', [SupplierController::class, 'index'])->name('index');
+        Route::post('/', [SupplierController::class, 'store'])->name('store');
+        Route::get('/{id}', [SupplierController::class, 'show'])->name('show');
+        Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('destroy');
+        Route::put('/{id}', [SupplierController::class,    'update'])->name('update');
+    });
+
+    Route::prefix('/pricelist')->name('pricelist.')->group(function () {
+        Route::get('/', [PriceListController::class, 'index'])->name('index');
+        Route::post('/', [PriceListController::class, 'store'])->name('store');
     });
 });
 require __DIR__ . '/settings.php';
