@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PriceListController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
@@ -57,12 +58,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/', [SupplierController::class, 'store'])->name('store');
         Route::get('/{id}', [SupplierController::class, 'show'])->name('show');
         Route::delete('/{id}', [SupplierController::class, 'destroy'])->name('destroy');
-        Route::put('/{id}', [SupplierController::class,    'update'])->name('update');
+        Route::put('/{id}', [SupplierController::class, 'update'])->name('update');
     });
 
     Route::prefix('/pricelist')->name('pricelist.')->group(function () {
         Route::get('/', [PriceListController::class, 'index'])->name('index');
         Route::post('/', [PriceListController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('/payments')->name('payments')->group(function () {
+        Route::get('/', [PaymentController::class, 'index'])->name('index');
+        Route::post('/', [PaymentController::class, 'store'])->name('store');
+        Route::put('/', [PaymentController::class, 'updateStatus'])->name('updateStatus');
+
+        Route::get('/{id}', [PaymentController::class, 'show'])->name('show');
+        Route::delete('/{id}', [PaymentController::class, 'destroy'])->name('destroy');
+        Route::get('/report/{id}', [PaymentController::class, 'showReport'])->name('showReport');
     });
 });
 require __DIR__ . '/settings.php';

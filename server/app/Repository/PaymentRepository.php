@@ -16,6 +16,14 @@ class PaymentRepository extends BaseRepository
     parent::__construct($model, self::$defaultRelations);
   }
 
+  public function getAllWithRelationsPaginated(int $perPage = 15): LengthAwarePaginator
+  {
+    return $this->model
+      ->with($this->getDefaultRelations())
+      ->latest()
+      ->paginate($perPage);
+  }
+
   //change status 
   public function updateStatus(string $paymentId, string $status): ?Payment
   {
