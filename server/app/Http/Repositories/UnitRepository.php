@@ -9,10 +9,10 @@ use App\Models\Unit;
 
 class UnitRepository extends BaseRepository
 {
-  protected array $defaultRelations = [];
+  protected static  array $defaultRelations = [];
 
   public function __construct(Unit $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 }

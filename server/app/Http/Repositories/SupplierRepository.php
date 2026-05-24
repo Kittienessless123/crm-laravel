@@ -9,11 +9,11 @@ use App\Models\Supplier;
 
 class SupplierRepository extends BaseRepository
 {
-  protected array $defaultRelations = [];
+  protected static  array $defaultRelations = [];
 
   public function __construct(Supplier $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 
   public function searchPaginated(string $term, string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator

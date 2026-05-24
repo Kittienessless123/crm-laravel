@@ -10,6 +10,8 @@ use Illuminate\View\View;
 use App\Http\Requests\Product\ProductCreationRequest;
 use App\Http\Requests\Product\ProductDeleteRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
+use App\Models\Category;
+use Inertia\Inertia;
 
 class ProductController extends Controller
 {
@@ -20,10 +22,23 @@ class ProductController extends Controller
     /**
      * Get all products
      */
-    public function index(): JsonResponse
+    public function index(Request $request)
     {
-        $products = $this->productService->getAll();
-        return response()->json($products);
+        $products = $this->productService->getAllWithPagination(
+            filters: $request->only(["search", "category_id",]),
+            sortBy: $request->input("sort_by", "created_at"),
+            direction: $request->input("direction", "desc"),
+            perPage: $request->input("per_page", 15)
+
+        );
+
+        $categories = Category::where('is_active', true)->get();
+
+        return Inertia::render('products/index', [
+            'products' => $products,
+            'categories' => $categories,
+            'filters' => $request->only(['search', 'category_id', 'sort_by', 'direction']),
+        ]);
     }
 
     /**
@@ -46,26 +61,6 @@ class ProductController extends Controller
         return response()->json($products);
     }
 
-    /**
-     * Get single product by ID
-     */
-    public function showAll(): JsonResponse
-    {
-        $product = $this->productService->getAll();
-
-        if (!$product) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product not found'
-            ], 404);
-        }
-
-        return response()->json($product);
-    }
-
-    /**
-     * Create single product
-     */
     public function store(ProductCreationRequest $request): JsonResponse
     {
         $product = $this->productService->create($request->validated());
@@ -109,20 +104,13 @@ class ProductController extends Controller
      * Delete single product
      * Получаем ID из route параметра {id}
      */
-    public function destroy(ProductDeleteRequest $request): JsonResponse
+    public function destroy(ProductDeleteRequest $request)
     {
         $data = $request->validated();
 
         $deleted = $this->productService->delete($data);
 
-        if (!$deleted) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Product not found'
-            ], 404);
-        }
-
-        return response()->json(null, 204);
+        return redirect()->back()->with('success', 'Товар удален');
     }
 
     /**
@@ -161,14 +149,12 @@ class ProductController extends Controller
         ], 200);
     }
 
-    /**
-     * Show product view (for Blade template, если нужно)
-     */
-    public function show(string $id): View
-    {
-        $product = $this->productService->getByProductId($id);
 
-        return view('product.view', [
+    public function show(string $id)
+    {
+        $product = $this->productService->getOneById($id);
+        if (!$product) abort(404);
+        return Inertia::render('products/view', [
             'product' => $product
         ]);
     }

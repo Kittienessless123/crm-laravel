@@ -9,7 +9,7 @@ use App\Models\Payment;
 
 class PaymentRepository extends BaseRepository
 {
-  protected array $defaultRelations = ['transaction'];
+  protected static  array $defaultRelations = ['transaction'];
 
   public function __construct(Payment $model)
   {

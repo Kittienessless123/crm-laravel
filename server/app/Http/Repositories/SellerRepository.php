@@ -9,11 +9,11 @@ use App\Models\Seller;
 
 class SellerRepository extends BaseRepository
 {
-  protected array $defaultRelations = [];
+  protected  static  array $defaultRelations = [];
 
   public function __construct(Seller $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 
   public function getSellerByNamePaginated(string $name, int $perPage = 15): ?LengthAwarePaginator

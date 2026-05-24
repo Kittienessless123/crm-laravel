@@ -9,11 +9,11 @@ use App\Models\User;
 
 class UserRepository extends BaseRepository
 {
-  protected array $defaultRelations = [''];
+  protected static  array $defaultRelations = [];
 
   public function __construct(User $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 
   public function updatePassword(string $userId, string $newHashedPassword): ?User

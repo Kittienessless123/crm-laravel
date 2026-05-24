@@ -9,11 +9,11 @@ use App\Models\TransactionItem;
 
 class TransactionItemRepository extends BaseRepository
 {
-  protected array $defaultRelations = ['transaction', 'product'];
+  protected static  array $defaultRelations = ['transaction', 'product'];
 
   public function __construct(TransactionItem $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 
   public function getItemByProductId(string $productId): ?TransactionItem

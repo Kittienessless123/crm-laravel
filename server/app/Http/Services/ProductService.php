@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class ProductService extends BaseService
 {
-  protected ProductRepository $repo; // Теперь работает!
+  protected $repo; // Теперь работает!
 
   public function __construct(ProductRepository $repo)
   {

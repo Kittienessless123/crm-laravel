@@ -9,11 +9,11 @@ use App\Models\PriceList;
 
 class PriceListRepository extends BaseRepository
 {
-  protected array $defaultRelations = ['supplier', 'product'];
+  protected static  array $defaultRelations = ['supplier', 'product'];
 
   public function __construct(PriceList $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 
   public function getAllWithRelationsPaginated(int $perPage = 15): LengthAwarePaginator

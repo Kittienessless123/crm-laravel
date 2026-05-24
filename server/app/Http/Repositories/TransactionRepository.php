@@ -9,11 +9,11 @@ use App\Models\Transaction;
 
 class TransactionRepository extends BaseRepository
 {
-  protected array $defaultRelations = ['seller', 'payments', 'items'];
+  protected static  array $defaultRelations = ['seller', 'payments', 'items'];
 
   public function __construct(Transaction $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 
   public function getBySellerIdPaginated(string $sellerId, string $sortBy = 'creation_date', string $direction = 'desc', int $perPage = 15): LengthAwarePaginator

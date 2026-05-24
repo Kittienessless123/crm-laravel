@@ -13,7 +13,7 @@ class ProductRepository extends BaseRepository
 
   public function __construct(Product $model)
   {
-    parent::__construct($model, self::$defaultRelations);
+    parent::__construct($model, $this->defaultRelations);
   }
 
   public function getBySku(string $sku): ?Product
