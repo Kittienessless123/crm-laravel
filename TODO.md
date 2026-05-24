@@ -18,9 +18,9 @@
 - [ ] supplier 
   -- all 
   -- one
-- [ ] product
-  -- all 
-  -- one
+- [x] product
+    - [x] all 
+    - [x] one
 - [ ] seller
   -- all 
   -- one

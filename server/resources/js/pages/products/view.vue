@@ -1,102 +1,70 @@
-<template>
-    <div style="padding: 20px; max-width: 800px; margin: 0 auto">
-        <Link
-            href="/products"
-            style="color: blue; margin-bottom: 20px; display: inline-block"
-        >
-            ← Назад к списку
-        </Link>
-
-        <h1>{{ product!.product_name }}</h1>
-
-        <div
-            style="
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-                margin-top: 20px;
-            "
-        >
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>SKU:</strong> {{ product!.sku || '—' }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Внешний ID:</strong> {{ product!.product_id || '—' }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Категория:</strong> {{ product!.category?.name || '—' }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Ед. измерения:</strong> {{ product!.unit?.name || '—' }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Базовая цена:</strong> {{ product!.base_price }}
-                {{ product!.currency }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Розничная цена:</strong> {{ product!.retail_price }}
-                {{ product!.currency }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Оптовая цена:</strong>
-                {{ product!.wholesale_price || '—' }} {{ product!.currency }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Наценка:</strong> {{ product!.margin }}%
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Продавец:</strong> {{ product!.seller?.name || '—' }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Поставщик:</strong> {{ product!.supplier?.name || '—' }}
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>Статус:</strong>
-                <span :style="{ color: product!.is_active ? 'green' : 'red' }">
-                    {{ product!.is_active ? 'Активен' : 'Неактивен' }}
-                </span>
-            </div>
-            <div style="padding: 10px; background: #f9f9f9; border-radius: 5px">
-                <strong>В наличии:</strong>
-                <span
-                    :style="{ color: product!.is_available ? 'green' : 'red' }"
-                >
-                    {{ product!.is_available ? 'Да' : 'Нет' }}
-                </span>
-            </div>
-        </div>
-
-        <div
-            v-if="product!.description"
-            style="
-                margin-top: 20px;
-                padding: 15px;
-                background: #f9f9f9;
-                border-radius: 5px;
-            "
-        >
-            <strong>Описание:</strong>
-            <p>{{ product!.description }}</p>
-        </div>
-
-        <div
-            v-if="product!.size"
-            style="
-                margin-top: 10px;
-                padding: 15px;
-                background: #f9f9f9;
-                border-radius: 5px;
-            "
-        >
-            <strong>Размер:</strong> {{ product!.size }}
-        </div>
-    </div>
-</template>
-
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3'
 
-defineProps({
-    product: Object,
-});
+interface Product {
+  id: string
+  product_name: string
+  sku: string | null
+  product_id: string | null
+  description: string | null
+  size: string | null
+  base_price: number
+  retail_price: number
+  wholesale_price: number | null
+  currency: string
+  margin: number
+  is_active: boolean
+  is_available: boolean
+  category?: { name: string } | null
+  unit?: { name: string } | null
+  seller?: { name: string } | null
+  supplier?: { name: string } | null
+}
+
+defineProps<{ product: Product }>()
 </script>
+
+<template>
+  <div class="p-6 max-w-3xl mx-auto text-gray-300">
+    <Link href="/products" class="text-blue-400 hover:underline mb-4 inline-block">← Назад к списку</Link>
+    <h1 class="text-2xl font-bold text-white mb-6">{{ product.product_name }}</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div v-for="(value, label) in {
+        'SKU': product.sku,
+        'Внешний ID': product.product_id,
+        'Категория': product.category?.name,
+        'Ед. измерения': product.unit?.name,
+        'Базовая цена': `${product.base_price} ${product.currency}`,
+        'Розничная цена': `${product.retail_price} ${product.currency}`,
+        'Оптовая цена': product.wholesale_price ? `${product.wholesale_price} ${product.currency}` : null,
+        'Наценка': `${product.margin}%`,
+        'Продавец': product.seller?.name,
+        'Поставщик': product.supplier?.name,
+        'Размер': product.size,
+      }" :key="label"
+        class="bg-gray-800 p-4 rounded border border-gray-700">
+        <div class="text-gray-400 text-sm">{{ label }}</div>
+        <div class="text-white mt-1">{{ value || '—' }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-4 rounded border border-gray-700">
+        <div class="text-gray-400 text-sm">Статус</div>
+        <span :class="product.is_active ? 'text-green-400' : 'text-red-400'">
+          {{ product.is_active ? 'Активен' : 'Неактивен' }}
+        </span>
+      </div>
+      <div class="bg-gray-800 p-4 rounded border border-gray-700">
+        <div class="text-gray-400 text-sm">В наличии</div>
+        <span :class="product.is_available ? 'text-green-400' : 'text-red-400'">
+          {{ product.is_available ? 'Да' : 'Нет' }}
+        </span>
+      </div>
+    </div>
+
+    <div v-if="product.description" class="mt-6 bg-gray-800 p-4 rounded border border-gray-700">
+      <div class="text-gray-400 text-sm mb-2">Описание</div>
+      <p class="text-gray-300">{{ product.description }}</p>
+    </div>
+  </div>
+</template>
